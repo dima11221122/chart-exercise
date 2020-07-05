@@ -73,13 +73,13 @@ export class ChartService {
       .domain(yRange)
       .range(yDomain)
     ;
-    const diff = yDomain[0] - yDomain[1];
+    const diff = yRange[0] - yRange[1];
     const steps = 5;
     const stepSize = Math.floor( diff / steps);
     const res: YAxisTick[] = [];
     for (let i = 0, currentY = yRange[0]; i < steps; ++i) {
       res.push({
-        displayValue: invertYScale(currentY),
+        displayValue: Math.floor(invertYScale(currentY) / 1000),
         yCoordinate: currentY
       });
       currentY -= stepSize;

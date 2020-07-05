@@ -1,4 +1,4 @@
 <svg:g *ngFor="let tick of yTicks;" attr.transform="translate(0, {{tick.yCoordinate}})">
-  <text>{{tick.displayValue}}</text>
-  <line [attr.x1]="marginLeft" y1="0" [attr.x2]="width" y2="0" stroke="red"></line>
+  <text x="90" text-anchor="end" alignment-baseline="middle" >{{tick.displayValue | number}}</text>
+  <line [attr.x1]="marginLeft" y1="0" [attr.x2]="width" y2="0" stroke="#f0f0f0"></line>
 </svg:g>

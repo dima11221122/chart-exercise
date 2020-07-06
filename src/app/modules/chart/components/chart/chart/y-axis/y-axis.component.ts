@@ -1,25 +1,19 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartDataItem } from '../../../models/chart-data-item';
-import { ChartService, YAxisTick } from '../chart.service';
+import { YAxisTick } from '../../../../services/chart/chart.service';
 
 @Component({
   selector: '[app-y-axis]',
   templateUrl: './y-axis.component.html',
-  styleUrls: ['./y-axis.component.scss']
+  styleUrls: ['./y-axis.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class YAxisComponent implements OnInit, OnChanges {
+export class YAxisComponent implements OnInit {
   @Input() bars: ChartDataItem[];
   @Input() width: number;
   @Input() marginLeft: number;
-
-  yTicks: YAxisTick[];
-  constructor(private chartService: ChartService) { }
+  @Input() yTicks: YAxisTick[];
 
   ngOnInit(): void {
   }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.yTicks = this.chartService.generateYTicks();
-  }
-
 }

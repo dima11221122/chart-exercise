@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartDataItem } from '../../../models/chart-data-item';
-import { ChartService } from '../chart.service';
+import { ChartService, XAxisTick } from '../../../../services/chart/chart.service';
 
 @Component({
   selector: '[app-x-axis]',
@@ -8,23 +8,11 @@ import { ChartService } from '../chart.service';
   styleUrls: ['./x-axis.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class XAxisComponent implements OnInit, OnChanges {
-  @Input() bars: ChartDataItem[];
-  middleX: number;
-
-  constructor(
-    private chartService: ChartService
-  ) { }
+export class XAxisComponent implements OnInit {
+  @Input() xTicks: XAxisTick[];
+  @Input() barCenter: number;
 
   ngOnInit(): void {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.middleX = this.chartService.getBandwidthArea() / 2;
-  }
-
-  getX(bar: ChartDataItem): number {
-    return this.chartService.getX(bar.name)
   }
 
 }

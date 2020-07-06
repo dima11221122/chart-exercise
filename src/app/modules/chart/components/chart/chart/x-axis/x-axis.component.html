@@ -1,3 +1,3 @@
-<svg:g *ngFor="let bar of bars" attr.transform="translate({{getX(bar)}}, 20)">
-  <text text-anchor="middle" [attr.x]="middleX" fill="black">{{bar.name}}</text>
+<svg:g *ngFor="let tick of xTicks" attr.transform="translate({{tick.xCoordinate}}, 20)">
+  <text text-anchor="middle" [attr.x]="barCenter" fill="black">{{tick.displayValue}}</text>
 </svg:g>

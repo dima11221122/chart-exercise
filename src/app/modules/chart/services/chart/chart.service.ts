@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as d3 from 'd3';
-import { ChartDataItem } from '../../models/chart-data-item';
-import { MarginsConfig } from '../../models/margins-config';
-import { ViewboxConfig } from '../../models/viewbox-config';
+import { ChartDataItem } from '../../components/models/chart-data-item';
+import { MarginsConfig } from '../../components/models/margins-config';
+import { ViewboxConfig } from '../../components/models/viewbox-config';
 
 export enum YAxisType {
   Linear,
@@ -20,6 +20,11 @@ export interface YAxisTick {
   yCoordinate: number;
 }
 
+export interface XAxisTick {
+  displayValue: string;
+  xCoordinate: number;
+}
+
 @Injectable()
 export class ChartService {
   private xScale: d3.ScaleBand<string>;
@@ -32,6 +37,10 @@ export class ChartService {
     return this.yAxisType === YAxisType.Linear ? d3.scaleLinear() : d3.scaleLog();
   }
 
+  private getMinYValue(): number {
+    return this.yAxisType === YAxisType.Linear ? 0 : 1;
+  }
+
   init(data: ChartDataItem[], params: InitParameters): void {
     const { margins, viewbox } = params;
     this.xScale = d3.scaleBand<string>()
@@ -41,7 +50,7 @@ export class ChartService {
 
     this.yAxisType = params.yAxisType;
     this.yScale = this.createYScale()
-      .domain([0, d3.max(data, d => Math.max(d.todayValue, d.yesterdayValue))])
+      .domain([this.getMinYValue(), d3.max(data, d => Math.max(d.todayValue, d.yesterdayValue))])
       .nice()
       .range([viewbox.height - margins.bottom, margins.top]);
   }
@@ -51,7 +60,7 @@ export class ChartService {
   }
 
   getBarHeight(value: number): number {
-    return this.yScale(0) - this.yScale(value);
+    return this.yScale(this.getMinYValue()) - this.yScale(value);
   }
 
   getY(value: number): number {
@@ -62,29 +71,17 @@ export class ChartService {
     return this.xScale.bandwidth();
   }
 
-  calculatePercent(oldValue: number, newValue: number): number {
-    return Math.abs(Math.floor(((oldValue - newValue) / oldValue) * 100));
+  generateYTicks(): YAxisTick[] {
+    return (d3.axisLeft(this.yScale).scale() as any).ticks(5).map(it => ({
+      displayValue: Math.floor(it / 1000),
+      yCoordinate: this.yScale(it)
+    }));
   }
 
-  generateYTicks(): YAxisTick[] {
-    const yDomain = this.yScale.domain();
-    const yRange = this.yScale.range();
-    const invertYScale = this.createYScale()
-      .domain(yRange)
-      .range(yDomain)
-    ;
-    const diff = yRange[0] - yRange[1];
-    const steps = 5;
-    const stepSize = Math.floor( diff / steps);
-    const res: YAxisTick[] = [];
-    for (let i = 0, currentY = yRange[0]; i < steps; ++i) {
-      res.push({
-        displayValue: Math.floor(invertYScale(currentY) / 1000),
-        yCoordinate: currentY
-      });
-      currentY -= stepSize;
-    }
-
-    return res;
+  generateXTicks(): XAxisTick[] {
+    return this.xScale.domain().map(it => ({
+      xCoordinate: this.getX(it),
+      displayValue: it
+    }));
   }
 }

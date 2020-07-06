@@ -1,0 +1,22 @@
+<svg:rect
+  [attr.y]="yesterdayBarGeometry.y"
+  [attr.width]="yesterdayBarGeometry.width"
+  [attr.height]="yesterdayBarGeometry.height"
+  [attr.x]="this.yesterdayBarGeometry.x"
+  class="yesterday-rect"
+></svg:rect>
+<svg:g attr.transform="translate({{this.todayBarGeometry.x}}, {{this.todayBarGeometry.y}})">
+  <rect
+    [attr.width]="todayBarGeometry.width"
+    [attr.height]="todayBarGeometry.height"
+    [class]="fillClass"
+  ></rect>
+  <text [attr.x]="this.todayBarCenter" y="-5" [class]="fillClass" text-anchor="middle">
+    <tspan>{{todayValue >= yesterdayValue ? '+' : '-'}}</tspan>
+    {{percent}}%
+    <tspan>{{todayValue >= yesterdayValue ? '↗' : '↘'}}</tspan>
+  </text>
+  <text [attr.x]="this.todayBarCenter" y="20" fill="white" text-anchor="middle">
+    {{todayValue | valueFormatter}}
+  </text>
+</svg:g>

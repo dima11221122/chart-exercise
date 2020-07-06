@@ -1,0 +1,13 @@
+<svg:g
+  *ngFor="let barParams of barsParams"
+  attr.transform="translate({{barParams.xCoordinate}}, 0)"
+  app-bar
+  [yesterdayBarGeometry]="barParams.yesterdayBarGeometry"
+  [todayBarGeometry]="barParams.todayBarGeometry"
+  [todayBarCenter]="barParams.todayBarCenter"
+  [isGood]="barParams.isGood"
+  [todayValue]="barParams.todayValue"
+  [yesterdayValue]="barParams.yesterdayValue"
+  [percent]="barParams.percent"
+>
+</svg:g>

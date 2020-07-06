@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ChartDataItem } from '../models/chart-data-item';
-import { ChartService, YAxisType } from './chart/chart.service';
+import { ChartService, XAxisTick, YAxisTick, YAxisType } from '../../services/chart/chart.service';
 import { ViewboxConfig } from '../models/viewbox-config';
 import { MarginsConfig } from '../models/margins-config';
+import { BarsParams, BarsService } from '../../services/bars/bars.service';
 
 @Component({
   selector: 'app-chart',
@@ -10,7 +11,8 @@ import { MarginsConfig } from '../models/margins-config';
   styleUrls: ['./chart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    ChartService
+    ChartService,
+    BarsService
   ]
 })
 export class ChartComponent implements OnInit {
@@ -20,7 +22,7 @@ export class ChartComponent implements OnInit {
 
   @Input()  set data(value: ChartDataItem[]) {
     this._data = value;
-    this.chartService.init(value, { viewbox: this.viewbox, margins: this.margins, yAxisType: YAxisType.Linear });
+    this.initChart();
   }
 
   public readonly viewbox: Readonly<ViewboxConfig> = {
@@ -28,18 +30,29 @@ export class ChartComponent implements OnInit {
     height: 500
   };
 
-  // Actual widths can be lower because of too many bars
-  public readonly desiredBarsAreaWidth = 120;
-  public readonly desiredTodayBarWidth = 80;
-  public readonly desiredYesterdayBarWidth = 25;
-
   public readonly margins: Readonly<MarginsConfig> = { top: 100, bottom: 100, left: 100, right: 100 };
+  operationsItems: { name: string, value: YAxisType }[] = [
+    { name: 'Log', value: YAxisType.Logarithmic },
+    { name: 'Linear', value: YAxisType.Linear },
+  ];
+  selectedOperation = this.operationsItems[0].value;
+
+  // X Axis parameters
+  xTicks: XAxisTick[];
+  barCenter: number;
+
+  // Y Axis parameters
+  yTicks: YAxisTick[];
+
+  // Bars parameters
+  barsParams: BarsParams[];
 
 
   private _data: ChartDataItem[];
 
   constructor(
-    private chartService: ChartService
+    private chartService: ChartService,
+    private barsService: BarsService
   ) { }
 
   ngOnInit(): void {
@@ -47,6 +60,19 @@ export class ChartComponent implements OnInit {
 
   getX(bar: ChartDataItem): number {
     return this.chartService.getX(bar.name);
+  }
+
+  initChart(): void {
+    this.chartService.init(this._data, { viewbox: this.viewbox, margins: this.margins, yAxisType: this.selectedOperation });
+    this.yTicks = this.chartService.generateYTicks();
+    this.xTicks = this.chartService.generateXTicks();
+    this.barCenter = this.chartService.getBandwidthArea() / 2;
+    this.barsParams = this.barsService.init(this._data);
+  }
+
+  operationChange(value: YAxisType): void {
+    this.selectedOperation = value;
+    this.initChart();
   }
 
 }

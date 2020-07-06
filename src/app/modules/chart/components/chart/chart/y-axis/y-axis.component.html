@@ -1,3 +1,4 @@
+<svg:text x="90" y="50" text-anchor="end">(K)</svg:text>
 <svg:g *ngFor="let tick of yTicks;" attr.transform="translate(0, {{tick.yCoordinate}})">
   <text x="90" text-anchor="end" alignment-baseline="middle" >{{tick.displayValue | number}}</text>
   <line [attr.x1]="marginLeft" y1="0" [attr.x2]="width" y2="0" stroke="#f0f0f0"></line>

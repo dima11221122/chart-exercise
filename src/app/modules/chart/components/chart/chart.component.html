@@ -1,10 +1,10 @@
-<div class="chart-axis-type">
+<div class="chart__axis-selector">
   <label>Operations: </label>
   <select name="axis-type" [ngModel]="selectedOperation" (ngModelChange)="operationChange(+$event)">
     <option *ngFor="let item of operationsItems" [value]="item.value">{{item.name}}</option>
   </select>
 </div>
-<svg attr.viewBox="0 0 {{viewbox.width}} {{viewbox.height}}" font-family="sans-serif" font-size="16">
+<svg attr.viewBox="0 0 {{viewbox.width}} {{viewbox.height}}" [attr.width]="width" [attr.height]="height" font-family="sans-serif" font-size="16">
   <g app-y-axis
      [bars]="data"
      [marginLeft]="margins.left"

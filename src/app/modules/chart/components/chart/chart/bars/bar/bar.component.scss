@@ -1,15 +1,18 @@
 $good-color: #32d574;
 $bad-color: #fe2844;
 
-.yesterday-rect {
-  fill: #f0f0f0;
-}
+.chart-bar {
+  &__yesterday-bar {
+    fill: #f0f0f0;
+  }
 
-.good-fill {
-  fill: $good-color;
-}
+  &__today-bar {
+    &_good {
+      fill: $good-color;
+    }
 
-.bad-fill {
-  fill: $bad-color;
+    &_bad {
+      fill: $bad-color;
+    }
+  }
 }
-

@@ -14,7 +14,7 @@ export class BarComponent implements OnInit {
   @Input() todayBarGeometry: BarGeometry;
   @Input() todayBarCenter: number;
   @Input() set isGood(value: boolean) {
-    this.fillClass = value ? 'good-fill' : 'bad-fill';
+    this.fillClass = value ? 'chart-bar__today-bar_good' : 'chart-bar__today-bar_bad';
   }
   @Input() todayValue: number;
   @Input() yesterdayValue: number;

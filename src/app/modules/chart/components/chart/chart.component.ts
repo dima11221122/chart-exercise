@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, Output } from '@angular/core';
 import { ChartDataItem } from '../models/chart-data-item';
 import { ChartService, XAxisTick, YAxisTick, YAxisType } from '../../services/chart/chart.service';
 import { ViewboxConfig } from '../models/viewbox-config';
@@ -24,6 +24,9 @@ export class ChartComponent implements OnInit {
     this._data = value;
     this.initChart();
   }
+
+  @Input() width = 1000;
+  @Output() height = 500;
 
   public readonly viewbox: Readonly<ViewboxConfig> = {
     width: 1000,

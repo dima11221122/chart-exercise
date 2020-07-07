@@ -58,10 +58,6 @@ export class ChartComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getX(bar: ChartDataItem): number {
-    return this.chartService.getX(bar.name);
-  }
-
   initChart(): void {
     this.chartService.init(this._data, { viewbox: this.viewbox, margins: this.margins, yAxisType: this.selectedOperation });
     this.yTicks = this.chartService.generateYTicks();
